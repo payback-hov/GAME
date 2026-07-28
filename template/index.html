@@ -1,42 +1,65 @@
-from flask import Flask, render_template
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cyber Security Game</title>
+    <style>
+        body { background-color: #111; color: #00ff00; font-family: 'Courier New', Courier, monospace; padding: 20px; }
+        h1 { color: #00ffff; border-bottom: 2px solid #00ffff; padding-bottom: 10px; }
+        h2 { color: #ffff00; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; border-left: 4px solid #555; padding-left: 10px; }
+        .mission-box { background-color: #222; padding: 20px; border-radius: 10px; margin: 20px 0; border: 2px solid #ff0000; }
+        button { background-color: #333; color: white; border: 2px solid #00ff00; padding: 10px 20px; margin: 10px; cursor: pointer; font-family: inherit; font-size: 16px; transition: 0.3s; }
+        button:hover { background-color: #555; transform: scale(1.05); }
+        .result-box { background-color: #222; padding: 15px; border-radius: 10px; margin-top: 20px; border-left: 10px solid #ff0000; white-space: pre-wrap; font-weight: bold; color: #ffaa00; }
+        .reset-btn { background-color: #800000; border-color: #ff0000; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Cybersecurity Investigation Game</h1>
+    
+    <h2>📋 Evidence Board (Review the logs)</h2>
+    
+    <h3>📧 Email Logs</h3>
+    <ul>
+        {% for email in emails %}
+            <li>From: {{ email.sender }} -> To: {{ email.recipient }} | Subject: {{ email.subject }}</li>
+        {% endfor %}
+    </ul>
 
-app = Flask(__name__)
+    <h3>🔐 Authentication Logs</h3>
+    <ul>
+        {% for auth in auths %}
+            <li>{{ auth.timestamp }} - {{ auth.user }} - Status: {{ auth.status }} {% if auth.note %} (🚨 {{ auth.note }}) {% endif %}</li>
+        {% endfor %}
+    </ul>
 
-# --- Your simulated log data ---
-EMAIL_LOGS = [
-    {"sender": "alice@techcorp.com", "recipient": "bob@techcorp.com", "subject": "Mandatory Policy Update", "has_attachment": True},
-    {"sender": "bob@techcorp.com", "recipient": "alice@techcorp.com", "subject": "Quarterly Report", "has_attachment": False},
-]
-<h2>Your Mission</h2>
-<p>Who sent the suspicious email?</p>
-<form action="/investigate" method="POST">
-    <input type="hidden" name="suspect" value="alice@techcorp.com">
-    <button type="submit">Investigate Alice</button>
-</form>
-<form action="/investigate" method="POST">
-    <input type="hidden" name="suspect" value="bob@techcorp.com">
-    <button type="submit">Investigate Bob</button>
-</form>
-AUTH_LOGS = [
-    {"timestamp": "2026-06-06 08:32:15", "user": "alice@techcorp.com", "source_ip": "192.168.1.50", "status": "SUCCESS"},
-    {"timestamp": "2026-06-06 08:40:10", "user": "bob@techcorp.com", "source_ip": "203.0.113.42", "status": "SUCCESS", "note": "Suspicious login"},
-]
+    <div class="mission-box">
+        <h2 style="color: #ff0000; margin-top: 0;">YOUR MISSION:</h2>
+        <p><strong>The boss is worried!</strong> Someone logged in from a suspicious location and ran weird processes. <br>Who is the security risk? Click a name to investigate:</p>
+        
+        <form action="/investigate" method="POST">
+            <input type="hidden" name="suspect" value="alice">
+            <button type="submit">Investigate Alice</button>
+        </form>
+        <form action="/investigate" method="POST">
+            <input type="hidden" name="suspect" value="bob">
+            <button type="submit">Investigate Bob</button>
+        </form>
+        <form action="/investigate" method="POST">
+            <input type="hidden" name="suspect" value="charlie">
+            <button type="submit">Investigate Charlie</button>
+        </form>
+    </div>
 
-PROCESS_LOGS = [
-    {"timestamp": "2026-06-06 08:30:15", "user": "alice@techcorp.com", "host": "WORKSTATION-01", "process": "update_policy.exe", "parent": "outlook.exe"},
-    {"timestamp": "2026-06-06 08:35:50", "user": "bob@techcorp.com", "host": "WORKSTATION-02", "process": "cmd.exe", "parent": "update_policy.exe"},
-]
+    {% if result %}
+        <div class="result-box">
+            {{ result }}
+            <br><br>
+            <a href="/reset" style="text-decoration: none;"><button class="reset-btn">🔄 Play Again / Check Logs</button></a>
+        </div>
+    {% endif %}
 
-@app.route('/')
-def home():
-    # We pass the data to an HTML page so the browser can display it
-    return render_template('index.html', 
-                           emails=EMAIL_LOGS, 
-                           auths=AUTH_LOGS, 
-                           processes=PROCESS_LOGS)
-{% if result %}
-    <h2>Investigation Result:</h2>
-    <p style="font-weight: bold; color: red;">{{ result }}</p>
-{% endif %}
-if __name__ == '__main__':
-    app.run(debug=True)
+    <p style="margin-top: 50px; color: #888;">Cyber Security Game - Version 2.0 (Web Edition)</p>
+</body>
+</html>
