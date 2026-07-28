@@ -7,7 +7,16 @@ EMAIL_LOGS = [
     {"sender": "alice@techcorp.com", "recipient": "bob@techcorp.com", "subject": "Mandatory Policy Update", "has_attachment": True},
     {"sender": "bob@techcorp.com", "recipient": "alice@techcorp.com", "subject": "Quarterly Report", "has_attachment": False},
 ]
-
+<h2>Your Mission</h2>
+<p>Who sent the suspicious email?</p>
+<form action="/investigate" method="POST">
+    <input type="hidden" name="suspect" value="alice@techcorp.com">
+    <button type="submit">Investigate Alice</button>
+</form>
+<form action="/investigate" method="POST">
+    <input type="hidden" name="suspect" value="bob@techcorp.com">
+    <button type="submit">Investigate Bob</button>
+</form>
 AUTH_LOGS = [
     {"timestamp": "2026-06-06 08:32:15", "user": "alice@techcorp.com", "source_ip": "192.168.1.50", "status": "SUCCESS"},
     {"timestamp": "2026-06-06 08:40:10", "user": "bob@techcorp.com", "source_ip": "203.0.113.42", "status": "SUCCESS", "note": "Suspicious login"},
