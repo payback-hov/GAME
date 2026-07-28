@@ -1,5 +1,20 @@
 from flask import Flask, render_template
-
+@app.route('/investigate', methods=['POST'])
+def investigate():
+    suspect = request.form.get('suspect')
+    if suspect == "alice@techcorp.com":
+        result = "Alice sent a legitimate policy update! She is safe."
+    elif suspect == "bob@techcorp.com":
+        result = "Warning! Bob's login is marked as 'Suspicious'. He might be the security risk!"
+    else:
+        result = "Unknown user."
+    
+    # We pass the original data plus the result text back to the page
+    return render_template('index.html', 
+                           emails=EMAIL_LOGS, 
+                           auths=AUTH_LOGS, 
+                           processes=PROCESS_LOGS,
+                           result=result)
 app = Flask(__name__)
 
 # --- Your simulated log data ---
