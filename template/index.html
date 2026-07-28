@@ -34,6 +34,9 @@ def home():
                            emails=EMAIL_LOGS, 
                            auths=AUTH_LOGS, 
                            processes=PROCESS_LOGS)
-
+{% if result %}
+    <h2>Investigation Result:</h2>
+    <p style="font-weight: bold; color: red;">{{ result }}</p>
+{% endif %}
 if __name__ == '__main__':
     app.run(debug=True)
